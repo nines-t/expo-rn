@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
 
 const Vegeta = () => {
     const [character, setCharacter] = useState(null);
@@ -46,7 +46,7 @@ const Vegeta = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Image
                 source={{ uri: character.image }}
                 style={styles.image}
@@ -58,19 +58,19 @@ const Vegeta = () => {
                 <Text style={styles.propertyText}>Género: {character.gender}</Text>
                 <Text style={styles.propertyText}>Ki: {character.ki}</Text>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
     },
     image: {
-        width: 810,
+        width: '100%',
         height: 2053,
         marginBottom: 20,
     },
