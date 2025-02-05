@@ -19,11 +19,9 @@ const Vegeta = () => {
             const data = await response.json();
             setCharacter(data);
             setLoading(false);
-            console.log(data);
         } catch (err) {
             setError('Error al cargar los datos de Vegeta: ' + err.message);
             setLoading(false);
-            console.error(err);
         }
     };
 
@@ -72,8 +70,8 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     image: {
-        width: 410,
-        height: 1053,
+        width: 810,
+        height: 2053,
         marginBottom: 20,
     },
     name: {
