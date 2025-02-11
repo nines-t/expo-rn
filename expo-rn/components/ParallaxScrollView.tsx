@@ -19,10 +19,10 @@ type Props = PropsWithChildren<{
 }>;
 
 export default function ParallaxScrollView({
-  children,
-  headerImage,
-  headerBackgroundColor,
-}: Props) {
+                                             children,
+                                             headerImage,
+                                             headerBackgroundColor,
+                                           }: Props) {
   const colorScheme = useColorScheme() ?? 'light';
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
@@ -32,9 +32,9 @@ export default function ParallaxScrollView({
       transform: [
         {
           translateY: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
+              scrollOffset.value,
+              [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
+              [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
           ),
         },
         {
@@ -45,23 +45,23 @@ export default function ParallaxScrollView({
   });
 
   return (
-    <ThemedView style={styles.container}>
-      <Animated.ScrollView
-        ref={scrollRef}
-        scrollEventThrottle={16}
-        scrollIndicatorInsets={{ bottom }}
-        contentContainerStyle={{ paddingBottom: bottom }}>
-        <Animated.View
-          style={[
-            styles.header,
-            { backgroundColor: headerBackgroundColor[colorScheme] },
-            headerAnimatedStyle,
-          ]}>
-          {headerImage}
-        </Animated.View>
-        <ThemedView style={styles.content}>{children}</ThemedView>
-      </Animated.ScrollView>
-    </ThemedView>
+      <ThemedView style={styles.container}>
+        <Animated.ScrollView
+            ref={scrollRef}
+            scrollEventThrottle={16}
+            scrollIndicatorInsets={{ bottom }}
+            contentContainerStyle={{ paddingBottom: bottom }}>
+          <Animated.View
+              style={[
+                styles.header,
+                { backgroundColor: headerBackgroundColor[colorScheme] },
+                headerAnimatedStyle,
+              ]}>
+            {headerImage}
+          </Animated.View>
+          <ThemedView style={styles.content}>{children}</ThemedView>
+        </Animated.ScrollView>
+      </ThemedView>
   );
 }
 

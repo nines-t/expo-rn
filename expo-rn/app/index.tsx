@@ -1,39 +1,37 @@
-import React from  'react'
 
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { BoxContainer } from '@/components/BoxContainer'
-import { HelloWave } from '@/components/HelloWave'
-import { useState } from "react";
+import { FlatList, View } from 'react-native'
+import { CharacterContainer } from '@/components/CharacterContainer'
+import  { Screen } from '@/components/Screen'
+import { SearchBox } from '@/components/SearchBox'
+import { Text } from '@/components/Text'
 
-const boxes = [1, 2, 3, 4, 5, 6, 7,8, 9, 10]
+import { useCharacters } from '@/api-client/getCharacters'
 
 export default function Index() {
-    const [showTitle, setShowTitle] = useState(false);
+    const { characters, refreshing, fetchCharacters } = useCharacters()
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <Text style={styles.title}>Hello World!</Text>
-                <HelloWave />
-                {boxes.map((box, index) => (
-                    <BoxContainer key={index} box={box} />
-                ))}
-            </View>
-        </ScrollView>
+        <>
+            <Screen title="Dragon Expo Z" scroll={false}>
+                <FlatList
+                    refreshing={refreshing}
+                    onRefresh={() => {
+                        fetchCharacters()
+                    }}
+                    data={characters}
+                    renderItem={({ item }) => <CharacterContainer key={item.id} character={item} />}
+                    ListEmptyComponent={() => <Text center red>No hay elementos</Text>}
+                    ListHeaderComponent={() => <Text center color="#fff">ListHeaderComponent</Text>}
+                    ListFooterComponent={() => <Text center color="#fff">{`Total de personajes: ${characters.length}`}</Text>}
+                    ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                    style={{
+                        marginBottom: 100,
+                    }}
+                    numColumns={2}
+                    keyExtractor={(item) => `${item.id}`}
+                />
+            </Screen>
+            <SearchBox />
+        </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#efefef',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-    },
-    title: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#ff0000',
-        marginTop: 40,
-    },
-});
