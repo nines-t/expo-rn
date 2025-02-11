@@ -4,15 +4,21 @@ import { Text } from '@/components/Text';
 import { styles } from './styles';
 import { type CharacterInfo } from '@/types/characters';
 
+import { capitalizeFirstLetter } from "@/utils/utils";
+
+type Props = {
+    url: string;
+    name: string;
+    stats: { base_stat: number; stat: { name: string } }[];
+    types: string[];
+    shiny: string;
+};
+
 export function CharacterInfo({
-                                  description,
-                                  ki,
-                                  maxKi,
-                                  race,
-                                  gender,
-                                  transformations,
-                              }: CharacterInfo) {
-    // Valor de animación para el efecto "saltando"
+                                name, url,
+                                stats, types = [], shiny,
+                              }: Props) {
+
     const jumpAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
@@ -36,67 +42,28 @@ export function CharacterInfo({
     return (
         <View style={styles.container}>
             {/* Informacion principal */}
-            <View style={styles.properties}>
-                {/* Description */}
+            <View style={styles.title}>
+                {/* Name */}
                 <Text style={localStyles.line}>
-                    <Text style={localStyles.key}>Description: </Text>
-                    <Text style={localStyles.value}>{description}</Text>
+                    <Text style={localStyles.key}>Nombre: </Text>
+                    <Text style={localStyles.value}>
+                        {capitalizeFirstLetter(name)}
+                    </Text>
                 </Text>
 
-                {/* Ki */}
-                <Text style={localStyles.line}>
-                    <Text style={localStyles.key}>Ki: </Text>
-                    <Text style={localStyles.value}>{ki}</Text>
+                {/* Tipo */}
+                <Text style={{ fontWeight: 'bold', marginTop: 10 }}>
+                    Tipos: {types?.length ? types.join(', ') : 'Desconocido'}
                 </Text>
 
-                {/* Max Ki */}
-                <Text style={localStyles.line}>
-                    <Text style={localStyles.key}>Max Ki: </Text>
-                    <Text style={localStyles.value}>{maxKi}</Text>
-                </Text>
 
-                {/* Race */}
-                <Text style={localStyles.line}>
-                    <Text style={localStyles.key}>Race: </Text>
-                    <Text style={localStyles.value}>{race}</Text>
-                </Text>
+                {/* Stats */}
+                <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Estadísticas:</Text>
+                {stats.map((stat, index) => (
+                    <Text key={index}>{stat.stat.name}: {stat.base_stat}</Text>
+                ))}
 
-                {/* Gender */}
-                <Text style={localStyles.line}>
-                    <Text style={localStyles.key}>Gender: </Text>
-                    <Text style={localStyles.value}>{gender}</Text>
-                </Text>
             </View>
-
-            {/* Lista de transformaciones */}
-            {transformations?.length > 0 && (
-                <View style={styles.stats}>
-                    <Text h2 style={localStyles.sectionTitle}>Transformations</Text>
-                    {transformations.map((transformation) => (
-                        <View key={transformation.id} style={localStyles.transformationBox}>
-
-                            {/* Nombre con efecto "saltando" */}
-                            <Text style={localStyles.line}>
-                                <Text style={localStyles.key}>Name: </Text>
-                                <Animated.Text
-                                    style={[
-                                        localStyles.value,
-                                        { transform: [{ translateY: jumpAnim }] },
-                                    ]}
-                                >
-                                    {transformation.name}
-                                </Animated.Text>
-                            </Text>
-
-                            {/* Ki de la transformación */}
-                            <Text style={localStyles.line}>
-                                <Text style={localStyles.key}>Ki: </Text>
-                                <Text style={localStyles.value}>{transformation.ki}</Text>
-                            </Text>
-                        </View>
-                    ))}
-                </View>
-            )}
         </View>
     );
 }

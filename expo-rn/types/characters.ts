@@ -1,30 +1,26 @@
-export type Character = {
+export interface Character {
+    id: string;
+    name: string;
+    url: string;
+    image: string;
+    types: string[];
+}
+
+export interface CharacterInfo {
     id: number;
     name: string;
-    ki: string;       // Se maneja como string porque viene con puntos y palabras ("60.000.000", "90 Septillion")
-    maxKi: string;    // Igualmente string
-    race: string;
-    gender: string;
-    description: string;
     image: string;
-    affiliation: string;
-    deletedAt: string | null; // o Date | null si en tu lógica quieres manejar un objeto Date
-};
+    url: string;
+    stats: PokemonStat[];
+    types: string[];
+    height: number;
+    weight: number;
+    shiny: string;
+}
 
-export type CharacterInfo = Character & {
-    originPlanet: {
-        id: number;
+export interface PokemonStat {
+    base_stat: number;
+    stat: {
         name: string;
-        isDestroyed: boolean;
-        description: string;
-        image: string;
-        deletedAt: string | null;
     };
-    transformations: Array<{
-        id: number;
-        name: string;
-        image: string;
-        ki: string;
-        deletedAt: string | null;
-    }>;
 }

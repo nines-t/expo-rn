@@ -5,7 +5,7 @@ import { Link } from 'expo-router';
 import { styles } from "./styles"
 
 import { type Character } from '@/types/characters'
-import imageBackground from '@/assets/images/background-character.png'
+import imageBackground from '@/assets/images/background_1.jpg'
 
 type Props = {
     character: Character
@@ -18,11 +18,6 @@ export function CharacterContainer({ character }: Props) {
 
             <Link href={`/character/${character.id}`} >
 
-                <ImageBackground
-                    source={imageBackground}
-                    style={styles.backgroundImage}
-                    resizeMode="cover"
-                >
                     <View style={styles.innerContainer}>
                         <Text style={styles.boxTitle}>
                             {character.name}
@@ -32,13 +27,10 @@ export function CharacterContainer({ character }: Props) {
                             style={styles.tinyLogo}
                             resizeMode="contain"
                         />
-                        <Text style={{ color: '#fff' }}>Ki: {character.ki}</Text>
-                        <Text style={{ color: '#fff' }}>Max Ki: {character.maxKi}</Text>
-                        <Text style={{ color: '#fff' }}>Race: {character.race}</Text>
-                        <Text style={{ color: '#fff' }}>Gender: {character.gender}</Text>
-                        <Text style={{ color: '#fff' }}>Affiliation: {character.affiliation}</Text>
+                        <Text style={{ color: '#000' }}>Nombre: {character.name}</Text>
+                        <Text style={{ color: '#000' }}>Numero en la pokédex: {character.id}</Text>
+
                     </View>
-                </ImageBackground>
             </Link>
         </View>
     )

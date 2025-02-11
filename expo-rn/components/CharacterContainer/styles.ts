@@ -6,11 +6,13 @@ export const styles = StyleSheet.create({
         margin: 5,
         height: 260,
         width: '50%',
+        alignItems: 'center',
     },
     innerContainer: {
-        backgroundColor: '#22222299',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
+        padding: 16,
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        margin: 8,
     },
     backgroundImage: {
         borderRadius: 8,
@@ -21,7 +23,7 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 5,
         textAlign: 'center',
-        color: 'yellow'
+        color: 'plum'
     },
     tinyLogo: {
         width: '100%',
