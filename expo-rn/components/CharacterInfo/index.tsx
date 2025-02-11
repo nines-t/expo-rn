@@ -6,10 +6,18 @@ import { type CharacterInfo } from '@/types/characters';
 
 import { capitalizeFirstLetter } from "@/utils/utils";
 
+type Props = {
+    url: string;
+    name: string;
+    stats: { base_stat: number; stat: { name: string } }[];
+    types: string[];
+    shiny: string;
+};
+
 export function CharacterInfo({
-                                name,
-                                  url
-                              }: CharacterInfo) {
+                                name, url,
+                                stats, types = [], shiny,
+                              }: Props) {
 
     const jumpAnim = useRef(new Animated.Value(0)).current;
 
@@ -43,11 +51,17 @@ export function CharacterInfo({
                     </Text>
                 </Text>
 
-                {/* Url */}
-                <Text style={localStyles.line}>
-                    <Text style={localStyles.key}>URL: </Text>
-                    <Text style={localStyles.value}>{url}</Text>
+                {/* Tipo */}
+                <Text style={{ fontWeight: 'bold', marginTop: 10 }}>
+                    Tipos: {types?.length ? types.join(', ') : 'Desconocido'}
                 </Text>
+
+
+                {/* Stats */}
+                <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Estadísticas:</Text>
+                {stats.map((stat, index) => (
+                    <Text key={index}>{stat.stat.name}: {stat.base_stat}</Text>
+                ))}
 
             </View>
         </View>

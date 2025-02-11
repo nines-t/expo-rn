@@ -15,11 +15,9 @@ interface PokemonInfo {
         other: {
             'official-artwork': {
                 front_default: string;
+                front_shiny: string;
             };
         };
-        official_artwork: {
-            shiny:string;
-        }
     };
     stats: {
         base_stat: number;
@@ -43,6 +41,9 @@ export function useCharacterInfo({ id }: Props) {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
             const json: PokemonInfo = await response.json()
 
+            console.log("📊 JSON recibido de la API:", json);
+            console.log("🔍 Tipos del Pokémon:", json.types);
+
             setCharacterInfo({
                 id: json.id,
                 name: json.name,
@@ -52,9 +53,10 @@ export function useCharacterInfo({ id }: Props) {
                 types: json.types.map(type => type.type.name),
                 height: json.height / 10,
                 weight: json.weight / 10,
+                shiny: json.sprites.other['official-artwork'].front_shiny,
             })
         } catch (error) {
-            console.error('error: ', error)
+            console.error('❌ Error al obtener los datos:', error);
         } finally {
             setRefreshing(false)
         }

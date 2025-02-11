@@ -1,45 +1,65 @@
 import { useEffect, useState } from 'react'
 import { Character } from '@/types/characters'
 
-interface PokemonResult {
-    name: string;
-    url: string;
-}
-
-interface ApiResponse {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: PokemonResult[];
-}
-
 export function useCharacters() {
     const [characters, setCharacters] = useState<Character[]>([])
     const [refreshing, setRefreshing] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    async function fetchCharacters() {
+    async function fetchTotalPokemon(): Promise<number> {
         try {
-            setRefreshing(true)
-            setError(null)
-            const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=30')
-            const json: ApiResponse = await response.json()
-
-            const processedResults = json.results.map(pokemon => {
-                const id = pokemon.url.split('/').filter(Boolean).pop() || ''
-                return {
-                    id,
-                    name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1),
-                    url: pokemon.url,
-                    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
-                    image_shiny: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${id}.png`,
-                }
-            })
-
-            setCharacters(processedResults)
+            const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1')
+            const json = await response.json()
+            return json.count // Total de Pokémon en la API
         } catch (error) {
-            console.error('error: ', error)
-            setError('Error al cargar los pokémon')
+            console.error('Error obteniendo el total de Pokémon:', error)
+            return 1025
+        }
+    }
+
+    async function fetchPokemonById(id: number): Promise<Character | null> {
+        try {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+            if (!response.ok) throw new Error(`Error en ID ${id}`)
+
+            const data = await response.json()
+            return {
+                id: data.id.toString(),
+                name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
+                url: `https://pokeapi.co/api/v2/pokemon/${id}`,
+                image: data.sprites.other['official-artwork'].front_default,
+                image_shiny: data.sprites.other['official-artwork'].front_shiny,
+            }
+        } catch (error) {
+            console.warn(`Pokemon con ID ${id} no encontrado, generando otro...`)
+            return null
+        }
+    }
+
+    async function fetchCharacters() {
+        setRefreshing(true)
+        setError(null)
+        try {
+            const totalPokemons = await fetchTotalPokemon()
+            const randomIds = new Set<number>()
+            const validCharacters: Character[] = []
+
+            while (validCharacters.length < 12) {
+                const randomId = Math.floor(Math.random() * totalPokemons) + 1
+                if (randomIds.has(randomId)) continue
+
+                randomIds.add(randomId)
+                const character = await fetchPokemonById(randomId)
+
+                if (character) {
+                    validCharacters.push(character)
+                }
+            }
+
+            setCharacters(validCharacters)
+        } catch (error) {
+            console.error('Error al cargar los Pokémon:', error)
+            setError('Error al cargar los Pokémon')
         } finally {
             setRefreshing(false)
         }

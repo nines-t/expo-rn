@@ -3,6 +3,7 @@ export interface Character {
     name: string;
     url: string;
     image: string;
+    types: string[];
 }
 
 export interface CharacterInfo {

@@ -1,4 +1,4 @@
-import { FlatList, View } from 'react-native'
+import { FlatList, View, ActivityIndicator, StyleSheet } from 'react-native'
 import { CharacterContainer } from '@/components/CharacterContainer'
 import { Screen } from '@/components/Screen'
 import { SearchBox } from '@/components/SearchBox'
@@ -30,11 +30,22 @@ export default function Index() {
                     onRefresh={fetchCharacters}
                     data={characters}
                     renderItem={({ item }) => <CharacterContainer key={item.id} character={item} />}
-                    ListEmptyComponent={() => <Text center red>No hay elementos</Text>}
+                    ListEmptyComponent={() =>
+                        refreshing ? (
+                            <View style={styles.loadingContainer}>
+                                <ActivityIndicator size={80} color="#FFCC00" style={styles.loader} />
+                                <Text center color="#fff" style={styles.loadingText}>
+                                    Cargando Pokémon...
+                                </Text>
+                            </View>
+                        ) : (
+                            <Text center red>No hay elementos</Text>
+                        )
+                    }
                     ListHeaderComponent={() => <Text center color="#fff">Lista de Pokémon</Text>}
                     ListFooterComponent={() => (
                         <Text center color="#fff">
-                            {`Total de personajes: ${characters.length}`}
+                            {`Total de Pokemons cargados al azar: ${characters.length}`}
                         </Text>
                     )}
                     ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
@@ -49,3 +60,20 @@ export default function Index() {
         </>
     )
 }
+
+const styles = StyleSheet.create({
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loader: {
+        transform: [{ scale: 1 }],
+    },
+    loadingText: {
+        marginTop: 20,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+})

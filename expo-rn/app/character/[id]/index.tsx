@@ -24,6 +24,8 @@ export default function Pokemon() {
             <CharacterInfo
                 url={characterInfo.url}
                 name={characterInfo.name}
+                stats={characterInfo.stats}
+                types={characterInfo.types}
             />
         </Screen>
     )
