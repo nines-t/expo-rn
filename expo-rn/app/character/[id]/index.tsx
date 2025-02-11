@@ -8,24 +8,22 @@ import { CharacterInfo } from '@/components/CharacterInfo'
 import { useCharacterInfo } from '@/api-client/getCharacterInfo'
 import { Text } from '@/components/Text'
 
-export default function Vegeta() {
+export default function Pokemon() {
     const { id } = useLocalSearchParams();
+    console.log("###################### id/index.tsx ")
+    console.log(id)
     const { characterInfo, refreshing, fetchCharacterInfo } = useCharacterInfo({ id })
     console.info('id: ', id, characterInfo)
     if (refreshing || !characterInfo) {
         return <Text center>Cargando...</Text>
+
     }
     return (
         <Screen title={`${characterInfo.name}`}>
             <MainImage uri={characterInfo.image} />
             <CharacterInfo
-                description={characterInfo.description}
-                ki={characterInfo.ki}
-                maxKi={characterInfo.maxKi}
-                race={characterInfo.race}
-                gender={characterInfo.gender}
+                url={characterInfo.url}
                 name={characterInfo.name}
-                transformations={characterInfo.transformations}
             />
         </Screen>
     )

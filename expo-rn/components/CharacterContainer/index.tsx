@@ -32,11 +32,8 @@ export function CharacterContainer({ character }: Props) {
                             style={styles.tinyLogo}
                             resizeMode="contain"
                         />
-                        <Text style={{ color: '#fff' }}>Ki: {character.ki}</Text>
-                        <Text style={{ color: '#fff' }}>Max Ki: {character.maxKi}</Text>
-                        <Text style={{ color: '#fff' }}>Race: {character.race}</Text>
-                        <Text style={{ color: '#fff' }}>Gender: {character.gender}</Text>
-                        <Text style={{ color: '#fff' }}>Affiliation: {character.affiliation}</Text>
+                        <Text style={{ color: '#fff' }}>Nombre: {character.name}</Text>
+                        <Text style={{ color: '#fff' }}>Numero en la pokédex: {character.id}</Text>
                     </View>
                 </ImageBackground>
             </Link>

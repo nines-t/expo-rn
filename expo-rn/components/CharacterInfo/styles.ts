@@ -2,42 +2,31 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        padding: 16,
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        margin: 8,
     },
-    properties: {
-        marginTop: 20,
-    },
-    stats: {
-        flex: 1,
-    },
-    ki: {
-        fontSize: 20,
+    title: {
+        fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
-        color: '#00FF00',
+        textAlign: 'center',
+        marginBottom: 16,
+        textTransform: 'capitalize'
     },
-    maxKi: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        color: '#00FF00',
+    statsContainer: {
+        gap: 8,
     },
-    race: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        marginBottom: 10,
-        color: '#FF0000',
+    statRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
     },
-    gender: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        marginBottom: 10,
-        color: '#FF0000',
+    statName: {
+        fontSize: 16,
     },
-    description: {
-        fontSize: 20,
+    statValue: {
+        fontSize: 16,
         fontWeight: 'bold',
     }
 });
