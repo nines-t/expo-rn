@@ -1,14 +1,17 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {Text} from "@/components/Text";
+import {capitalizeFirstLetter} from "@/utils/utils";
+import React from "react";
 
 export const styles = StyleSheet.create({
     container: {
         padding: 16,
-        backgroundColor: '#FFF',
+        backgroundColor: '#FFFFFF',
         borderRadius: 8,
         margin: 8,
     },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 16,
@@ -23,10 +26,6 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     statName: {
-        fontSize: 16,
+        fontSize: 14,
     },
-    statValue: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    }
 });

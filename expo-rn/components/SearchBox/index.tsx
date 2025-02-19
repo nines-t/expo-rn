@@ -2,29 +2,25 @@ import React, { useState } from 'react'
 
 import { View } from 'react-native'
 import { TextInput } from '@/components/TextInput'
-import { Text } from '@/components/Text'
 
-export function SearchBox() {
-    const [length, setLength] = useState(0)
+
+type Props = {
+    onChangeText?: (v: string) => void
+}
+export function SearchBox({ onChangeText  = () => {}}: Props) {
     return (
         <View
             style={{
                 height: 80,
                 width: '100%',
+                paddingHorizontal: 10,
                 position: 'absolute',
-                bottom: 0,
-                paddingHorizontal: 8,
-                backgroundColor: 'transparent',
+                bottom: 2,
             }}
         >
             <View
                 style={{
-                    width: '100%',
-                    borderColor: 'black',
-                    borderWidth: 1,
-                    paddingHorizontal: 8,
-                    borderRadius: 5,
-                    backgroundColor: '#333',
+                    marginHorizontal: 10,
                     flex: 1,
                 }}
             >
@@ -33,10 +29,19 @@ export function SearchBox() {
                     variant='normal'
                     inputMode='search'
                     onEndEditing={(v) => console.log(v)}
-                    onChangeText={(v) => setLength(v.length)}
+                    onChangeText={(v) => onChangeText(v)}
                     maxLength={30}
+                    style={{
+                        backgroundColor: '#333333EE',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        paddingHorizontal: 8,
+                        paddingVertical: 16,
+                        height: 50,
+                        color: '#fff',
+                        fontSize: 16,
+                    }}
                 />
-                <Text red center bold>{`${length} / 30` }</Text>
             </View>
         </View>
     )

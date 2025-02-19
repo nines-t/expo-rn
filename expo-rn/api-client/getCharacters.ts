@@ -44,7 +44,7 @@ export function useCharacters() {
             const randomIds = new Set<number>()
             const validCharacters: Character[] = []
 
-            while (validCharacters.length < 12) {
+            while (validCharacters.length < 3) {
                 const randomId = Math.floor(Math.random() * totalPokemons) + 1
                 if (randomIds.has(randomId)) continue
 

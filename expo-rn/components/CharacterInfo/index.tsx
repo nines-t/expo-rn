@@ -1,32 +1,22 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Animated, StyleSheet } from 'react-native';
+import { View, Animated, StyleSheet, Image } from 'react-native';
 import { Text } from '@/components/Text';
 import { styles } from './styles';
-import { type CharacterInfo } from '@/types/characters';
-
 import { capitalizeFirstLetter } from "@/utils/utils";
 
 type Props = {
     url: string;
     name: string;
-    stats: { base_stat: number; stat: { name: string } }[];
-    types: string[];
-    shiny: string;
 };
 
-export function CharacterInfo({
-                                name, url,
-                                stats, types = [], shiny,
-                              }: Props) {
-
+export function CharacterInfo({ name, url }: Props) {
     const jumpAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        // Secuencia infinita: sube y baja en bucle
         Animated.loop(
             Animated.sequence([
                 Animated.timing(jumpAnim, {
-                    toValue: -5, // Ajusta la distancia de "salto"
+                    toValue: -5,
                     duration: 300,
                     useNativeDriver: true,
                 }),
@@ -40,51 +30,52 @@ export function CharacterInfo({
     }, [jumpAnim]);
 
     return (
-        <View style={styles.container}>
-            {/* Informacion principal */}
-            <View style={styles.title}>
-                {/* Name */}
-                <Text style={localStyles.line}>
-                    <Text style={localStyles.key}>Nombre: </Text>
-                    <Text style={localStyles.value}>
-                        {capitalizeFirstLetter(name)}
-                    </Text>
+        <View style={localStyles.cardContainer}>
+
+            {/* Información del Pokémon */}
+            <View style={localStyles.infoContainer}>
+                <Text style={localStyles.title}>
+                    {capitalizeFirstLetter(name)}
                 </Text>
-
-                {/* Tipo */}
-                <Text style={{ fontWeight: 'bold', marginTop: 10 }}>
-                    Tipos: {types?.length ? types.join(', ') : 'Desconocido'}
-                </Text>
-
-
-                {/* Stats */}
-                <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Estadísticas:</Text>
-                {stats.map((stat, index) => (
-                    <Text key={index}>{stat.stat.name}: {stat.base_stat}</Text>
-                ))}
-
+                    <Text style={localStyles.title}>Número de expansiones en que aparece: </Text>
             </View>
         </View>
     );
 }
 
 const localStyles = StyleSheet.create({
-    line: {
-        marginBottom: 6,
-        flexWrap: 'wrap',
+    cardContainer: {
+        backgroundColor: '#FFF',
+        borderRadius: 12,
+        padding: 16,
+        margin: 16,
+        alignItems: 'center',
+        elevation: 5, // Sombra para Android
+        shadowColor: '#000', // Sombra para iOS
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+    },
+    imageContainer: {
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    infoContainer: {
+        alignItems: 'center',
     },
     key: {
-        color: 'yellow',
         fontWeight: 'bold',
+        color: '#000',
     },
     value: {
-        color: 'white',
+        color: '#007AFF',
     },
-    sectionTitle: {
-        marginBottom: 10,
-        color: 'yellow',
-    },
-    transformationBox: {
-        marginBottom: 15,
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 16,
+        textTransform: 'capitalize',
+        fontFamily: 'Roboto',
     },
 });

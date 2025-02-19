@@ -1,67 +1,81 @@
-import { FlatList, View, ActivityIndicator, StyleSheet } from 'react-native'
-import { CharacterContainer } from '@/components/CharacterContainer'
-import { Screen } from '@/components/Screen'
-import { SearchBox } from '@/components/SearchBox'
-import { Text } from '@/components/Text'
-import { useCharacters } from '@/api-client/getCharacters'
+import React, { useRef } from 'react';
+import { useState, useEffect } from 'react'
+import { View, Dimensions, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { Screen } from '@/components/Screen';
+import { SearchBox } from '@/components/SearchBox';
+import { Text } from '@/components/Text';
 
-interface Pokemon {
-    id: string;
-    name: string;
-    url: string;
-}
+import { useCharacters } from '@/api-client/getCharacters';
+import { type Character } from '@/types/characters'
+import { MiniCharacterContainer } from '@/components/MiniCharacterContainer';
+
+const { width } = Dimensions.get('window');
+const CARD_WIDTH = (width - 80) / 3;
+const SPACING = 10;
+const ITEM_WIDTH = CARD_WIDTH + SPACING;
 
 export default function Index() {
-    const { characters, refreshing, fetchCharacters, error } = useCharacters()
+    const { characters, refreshing, fetchCharacters, error } = useCharacters();
+    const flatListRef = useRef<FlatList>(null);
+    const [searchQuery, setSearchQuery] = useState('')
+    const [result, setResult] = useState<Character[]>([])
 
-    if (error) {
-        return (
-            <Screen title="PokeExpo">
-                <Text center red>{error}</Text>
-            </Screen>
-        )
-    }
+    useEffect(() => {
+        if (searchQuery.length === 0) {
+            setResult(characters)
+        }
+        const tmp = characters.filter((character) => character.name.toLowerCase().indexOf(searchQuery.toLowerCase())> -1)
+        setResult(tmp)
+    }, [searchQuery, characters])
 
     return (
         <>
             <Screen title="PokeExpo" scroll={false}>
-                <FlatList
-                    refreshing={refreshing}
-                    onRefresh={fetchCharacters}
-                    data={characters}
-                    renderItem={({ item }) => <CharacterContainer key={item.id} character={item} />}
-                    ListEmptyComponent={() =>
-                        refreshing ? (
-                            <View style={styles.loadingContainer}>
-                                <ActivityIndicator size={80} color="#FFCC00" style={styles.loader} />
-                                <Text center color="#fff" style={styles.loadingText}>
-                                    Cargando Pokémon...
-                                </Text>
-                            </View>
-                        ) : (
-                            <Text center red>No hay elementos</Text>
-                        )
-                    }
-                    ListHeaderComponent={() => <Text center color="#fff">Lista de Pokémon</Text>}
-                    ListFooterComponent={() => (
-                        <Text center color="#fff">
-                            {`Total de Pokemons cargados al azar: ${characters.length}`}
-                        </Text>
+                <View style={styles.container}>
+                    {refreshing ? (
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator size={80} color="#FFCC00" style={styles.loader} />
+                            <Text center color="#fff" style={styles.loadingText}>
+                                Cargando Pokémon...
+                            </Text>
+                        </View>
+                    ) : characters.length === 0 ? (
+                        <Text center red>No hay elementos</Text>
+                    ) : (
+                        <FlatList
+                            ref={flatListRef}
+                            data={characters}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.cardsContainer}
+                            renderItem={({ item }) => (
+                                <View style={styles.cardWrapper}>
+                                    <MiniCharacterContainer character={item} />
+                                </View>
+                            )}
+                            keyExtractor={(item) => item.id}
+                            onRefresh={fetchCharacters}
+                            refreshing={refreshing}
+                            decelerationRate="fast"
+                            initialNumToRender={3}
+                            snapToInterval={ITEM_WIDTH}
+                        />
                     )}
-                    ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-                    style={{
-                        marginBottom: 100,
-                    }}
-                    numColumns={2}
-                    keyExtractor={(item) => item.id}
-                />
+
+                </View>
             </Screen>
-            <SearchBox />
+            <SearchBox onChangeText={(v) => setSearchQuery(v)} />
         </>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'space-between',
+        paddingTop: 40,
+        paddingBottom: 20,
+    },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -76,4 +90,23 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
-})
+    cardsContainer: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+    },
+    cardWrapper: {
+        width: CARD_WIDTH,
+        height: 120,
+        marginHorizontal: SPACING / 2,
+    },
+    searchPrompt: {
+        width: '100%',
+        padding: 15,
+        alignItems: 'center',
+        marginTop: 'auto',
+    },
+    searchPromptText: {
+        fontSize: 16,
+        color: '#333',
+    },
+});
